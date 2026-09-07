@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXORA — Gaming Store</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+    --bg: #07080d;
+    --surface: #10121a;
+    --border: rgba(255,255,255,.08);
+    --border-hover: rgba(139,92,246,.5);
+    --text: #f7f7fb;
+    --muted: #85899b;
+    --primary: #8b5cf6;
+    --primary-dark: #6d3fe8;
+    --blue: #4f8cff;
+    --green: #39d98a;
+    --danger: #ff5c7a;
+    --radius: 18px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Inter, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at 10% 10%, rgba(139,92,246,.13), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(79,140,255,.08), transparent 25%),
+        var(--bg);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 76px;
+    background: rgba(7,8,13,.8);
+    backdrop-filter: blur(22px);
+    border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+    max-width: 1280px;
+    height: 100%;
+    margin: auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    cursor: pointer;
+    background: linear-gradient(90deg, #fff, #a78bfa, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+nav button {
+    border: 0;
+    background: transparent;
+    color: #9296a8;
+    padding: 10px 13px;
+    border-radius: 10px;
+    transition: .2s;
+}
+
+nav button:hover {
+    color: white;
+    background: rgba(255,255,255,.05);
+}
+
+.nav-primary {
+    color: #c2adff !important;
+    background: rgba(139,92,246,.13) !important;
+}
+
+main {
+    max-width: 1280px;
+    margin: auto;
+    padding: 55px 24px 100px;
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 360px;
+    padding: 65px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139,92,246,.16),
+            rgba(79,140,255,.05) 45%,
+            rgba(255,255,255,.02)
+        );
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    right: -100px;
+    top: -100px;
+    border-radius: 50%;
+    background: rgba(139,92,246,.18);
+    filter: blur(60px);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero h1 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: .98;
+    margin-bottom: 22px;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #fff, #a78bfa 50%, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.7;
+    max-width: 600px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin: 50px 0 20px;
+}
+
+.section-title {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 28px;
+}
+
+.section-subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 20px;
+}
+
+.product {
+    background: rgba(18,20,31,.72);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(15px);
+    transition: transform .3s, border-color .3s;
+    overflow: hidden;
+}
+
+.product:hover {
+    transform: translateY(-7px);
+    border-color: var(--border-hover);
+}
+
+.product-image {
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(
+            circle,
+            rgba(139,92,246,.08),
+            transparent 60%
+        );
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    padding: 28px;
+    object-fit: contain;
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 19px;
+    margin-bottom: 7px;
+}
+
+.price {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.primary {
+    border: 0;
+    border-radius: 10px;
+    padding: 11px 15px;
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-dark)
+    );
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.primary:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+}
+
+.secondary {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 13px;
+    background: rgba(255,255,255,.035);
+    color: #d8dae2;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.secondary:hover {
+    background: rgba(255,255,255,.08);
+}
+
+.auth-wrapper {
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth {
+    width: 100%;
+    max-width: 430px;
+    padding: 35px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+}
+
+.auth h1 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.auth p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.cart {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px;
+    margin-bottom: 12px;
+    background: rgba(18,20,31,.72);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: rgba(255,255,255,.03);
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-info h3 {
+    font-family: "Space Grotesk", sans-serif;
+    margin-bottom: 5px;
+}
+
+.cart-item-info p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(255,255,255,.04);
+    color: white;
+}
+
+.cart-total {
+    margin-top: 25px;
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(255,255,255,.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-total strong {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 26px;
+}
+
+.empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+}
+
+.loading {
+    text-align: center;
+    padding: 60px;
+    color: var(--muted);
+}
+
+.toast {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 500;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: rgba(20,22,31,.95);
+    color: white;
+    font-size: 13px;
+    transform: translateY(120px);
+    opacity: 0;
+    transition: .3s;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+@media (max-width: 850px) {
+    .products {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    .hero {
+        padding: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        height: 68px;
+    }
+
+    .header-inner {
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    nav button {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    main {
+        padding: 30px 15px 70px;
+    }
+
+    .hero {
+        min-height: 300px;
+        padding: 30px;
+    }
+
+    .products {
+        grid-template-columns: 1fr;
+    }
+
+    .product-image {
+        height: 250px;
+    }
+
+    .cart-item {
+        flex-wrap: wrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo" onclick="goHome()">NEXORA</div>
+        <nav id="nav"></nav>
+    </div>
+</header>
+
+<main id="app"></main>
+
+<div class="toast" id="toast"></div>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://orqvlnkeaigzbnmhyjsn.supabase.co";
+
+/*
+ * IMPORTANT:
+ * Replace this with the CURRENT anon/publishable key
+ * from your Supabase project.
+ *
+ * Supabase Dashboard
+ * → Project Settings
+ * → API
+ */
+const SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ycXZsbmtlYWlnemJubWh5anNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTE3NDAsImV4cCI6MjA5MTUyNzc0MH0.vzUwVX1e6QY1RdHAHTrqjn7RDfgJdXD0KXn5h-hxG74";
+
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+        }
+    }
+);
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let products = [];
+
+let cart = JSON.parse(
+    localStorage.getItem("nexora_cart") || "[]"
+);
+
+let currentUser = null;
+let currentPage = "home";
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2200);
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+function saveCart() {
+
+    localStorage.setItem(
+        "nexora_cart",
+        JSON.stringify(cart)
+    );
+}
+
+
+function cartCount() {
+
+    return cart.reduce(
+        (total, item) =>
+            total + Number(item.quantity),
+        0
+    );
+}
+
+
+function cartTotal() {
+
+    return cart.reduce(
+        (total, item) =>
+            total +
+            Number(item.price) *
+            Number(item.quantity),
+        0
+    );
+}
+
+
+function addToCart(productId) {
+
+    const product = products.find(
+        p => String(p.id) === String(productId)
+    );
+
+    if (!product) {
+
+        showToast("Product not found.");
+
+        return;
+    }
+
+    const existing = cart.find(
+        item =>
+            String(item.id) ===
+            String(productId)
+    );
+
+    if (existing) {
+
+        existing.quantity++;
+
+    } else {
+
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: Number(product.price),
+            image: product.images?.[0] || "",
+            quantity: 1
+        });
+    }
+
+    saveCart();
+
+    updateNav();
+
+    showToast(
+        `${product.name} added to cart`
+    );
+}
+
+
+function changeQuantity(productId, amount) {
+
+    const item = cart.find(
+        item =>
+            String(item.id) ===
+            String(productId)
+    );
+
+    if (!item) return;
+
+    item.quantity += amount;
+
+    if (item.quantity <= 0) {
+
+        cart = cart.filter(
+            item =>
+                String(item.id) !==
+                String(productId)
+        );
+    }
+
+    saveCart();
+
+    updateNav();
+
+    renderCart();
+}
+
+
+function removeFromCart(productId) {
+
+    cart = cart.filter(
+        item =>
+            String(item.id) !==
+            String(productId)
+    );
+
+    saveCart();
+
+    updateNav();
+
+    renderCart();
+
+    showToast("Removed from cart");
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function updateNav() {
+
+    const nav =
+        document.getElementById("nav");
+
+    nav.innerHTML = `
+        <button
+            class="nav-primary"
+            onclick="goHome()">
+            Store
+        </button>
+
+        <button onclick="goCart()">
+            Cart (${cartCount()})
+        </button>
+
+        ${
+            currentUser
+                ? `
+                    <button onclick="logout()">
+                        Logout
+                    </button>
+                `
+                : `
+                    <button onclick="goLogin()">
+                        Sign In
+                    </button>
+                `
+        }
+    `;
+}
+
+
+function goHome() {
+
+    currentPage = "home";
+
+    render();
+}
+
+
+function goCart() {
+
+    currentPage = "cart";
+
+    render();
+}
+
+
+function goLogin() {
+
+    currentPage = "login";
+
+    render();
+}
+
+
+function render() {
+
+    updateNav();
+
+    if (currentPage === "home") {
+
+        renderHome();
+
+    } else if (currentPage === "cart") {
+
+        renderCart();
+
+    } else if (currentPage === "login") {
+
+        renderLogin();
+    }
+}
+
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+async function fetchProducts() {
+
+    const app =
+        document.getElementById("app");
+
+    if (!products.length) {
+
+        app.innerHTML = `
+            <div class="loading">
+                Loading products...
+            </div>
+        `;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                "http://localhost:8000/products"
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        products =
+            await response.json();
+
+        if (currentPage === "home") {
+
+            renderHome();
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Product API error:",
+            error
+        );
+
+        app.innerHTML = `
+            <div class="empty">
+
+                <h2>
+                    Could not load products
+                </h2>
+
+                <p style="margin-top:10px">
+                    Make sure your Go backend
+                    is running on
+                    http://localhost:8000
+                </p>
+
+                <button
+                    class="primary"
+                    style="margin-top:20px"
+                    onclick="fetchProducts()">
+                    Try Again
+                </button>
+
+            </div>
+        `;
+
+        showToast(
+            "Could not load products."
+        );
+    }
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function renderHome() {
+
+    const app =
+        document.getElementById("app");
+
+    app.innerHTML = `
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <h1>
+                    Level up your
+                    <span class="gradient-text">
+                        setup.
+                    </span>
+                </h1>
+
+                <p>
+                    High-performance gaming
+                    peripherals built for players
+                    who demand more.
+                </p>
+
+            </div>
+
+        </section>
+
+        <div class="section-header">
+
+            <div>
+
+                <div class="section-title">
+                    Products
+                </div>
+
+                <div class="section-subtitle">
+                    Premium gear for your next session.
+                </div>
+
+            </div>
+
+        </div>
+
+        <div
+            class="products"
+            id="productsGrid">
+        </div>
+    `;
+
+    const grid =
+        document.getElementById(
+            "productsGrid"
+        );
+
+    if (!products.length) {
+
+        grid.innerHTML = `
+            <div
+                class="empty"
+                style="grid-column:1/-1">
+
+                No products available.
+
+            </div>
+        `;
+
+        return;
+    }
+
+    grid.innerHTML =
+        products.map(product => {
+
+            const image =
+                product.images?.[0] || "";
+
+            const price =
+                Number(
+                    product.price || 0
+                ).toFixed(2);
+
+            return `
+                <article class="product">
+
+                    <div class="product-image">
+
+                        ${
+                            image
+                                ? `
+                                    <img
+                                        src="${escapeHtml(image)}"
+                                        alt="${escapeHtml(product.name)}"
+                                        onerror="
+                                            this.style.display='none'
+                                        "
+                                    >
+                                `
+                                : `
+                                    <span
+                                        style="
+                                            color:#85899b;
+                                            font-size:14px
+                                        ">
+                                        No image
+                                    </span>
+                                `
+                        }
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <h3>
+                            ${escapeHtml(product.name)}
+                        </h3>
+
+                        <div class="price">
+                            $${price}
+                        </div>
+
+                        <div class="product-actions">
+
+                            <button
+                                class="primary"
+                                onclick="
+                                    addToCart(
+                                        '${escapeJs(product.id)}'
+                                    )
+                                ">
+                                Add to Cart
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+            `;
+
+        }).join("");
+}
+
+
+/* =========================================================
+   CART PAGE
+========================================================= */
+
+function renderCart() {
+
+    const app =
+        document.getElementById("app");
+
+    if (!cart.length) {
+
+        app.innerHTML = `
+            <div class="empty">
+
+                <h2>
+                    Your cart is empty.
+                </h2>
+
+                <p style="margin-top:10px">
+                    Find something awesome
+                    for your setup.
+                </p>
+
+                <button
+                    class="primary"
+                    style="margin-top:22px"
+                    onclick="goHome()">
+                    Browse Products
+                </button>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    app.innerHTML = `
+        <div class="cart">
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="section-title">
+                        Your Cart
+                    </div>
+
+                    <div class="section-subtitle">
+                        ${cartCount()} item(s)
+                    </div>
+
+                </div>
+
+            </div>
+
+            ${cart.map(item => `
+
+                <div class="cart-item">
+
+                    <img
+                        src="${escapeHtml(item.image)}"
+                        alt="${escapeHtml(item.name)}"
+                    >
+
+                    <div class="cart-item-info">
+
+                        <h3>
+                            ${escapeHtml(item.name)}
+                        </h3>
+
+                        <p>
+                            $${Number(item.price).toFixed(2)}
+                            each
+                        </p>
+
+                    </div>
+
+                    <div class="quantity">
+
+                        <button
+                            onclick="
+                                changeQuantity(
+                                    '${escapeJs(item.id)}',
+                                    -1
+                                )
+                            ">
+                            −
+                        </button>
+
+                        <span>
+                            ${item.quantity}
+                        </span>
+
+                        <button
+                            onclick="
+                                changeQuantity(
+                                    '${escapeJs(item.id)}',
+                                    1
+                                )
+                            ">
+                            +
+                        </button>
+
+                    </div>
+
+                    <strong>
+                        $${(
+                            Number(item.price) *
+                            Number(item.quantity)
+                        ).toFixed(2)}
+                    </strong>
+
+                    <button
+                        class="secondary"
+                        onclick="
+                            removeFromCart(
+                                '${escapeJs(item.id)}'
+                            )
+                        ">
+                        Remove
+                    </button>
+
+                </div>
+
+            `).join("")}
+
+            <div class="cart-total">
+
+                <div>
+
+                    <div
+                        style="
+                            color:var(--muted);
+                            font-size:13px;
+                            margin-bottom:5px
+                        ">
+                        Total
+                    </div>
+
+                    <strong>
+                        $${cartTotal().toFixed(2)}
+                    </strong>
+
+                </div>
+
+                <button
+                    class="primary"
+                    onclick="checkout()">
+                    Checkout
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+async function checkout() {
+    if (!currentUser) {
+        showToast("Please sign in before checkout.");
+        goLogin();
+        return;
+    }
+
+    if (!cart.length) {
+        showToast("Your cart is empty.");
+        return;
+    }
+
+    showToast("Preparing secure checkout...");
+
+    try {
+        // Change this URL from "/order" to "/create-checkout-session"
+        const response = await fetch("http://localhost:8000/create-checkout-session", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${currentUser.token}`
+            },
+            body: JSON.stringify({
+                // Send the total calculated amount from your frontend cart total function
+                total: cartTotal() 
+            })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.url) {
+            cart = [];
+            saveCart();
+            window.location.href = data.url; // Redirects to Stripe Checkout
+        } else {
+            throw new Error("No checkout URL returned from server.");
+        }
+
+    } catch (error) {
+        console.error("Checkout error:", error);
+        showToast("Checkout failed. Please try again.");
+    }
+}
+
+
+/* =========================================================
+   GOOGLE LOGIN
+========================================================= */
+
+async function loginWithGoogle() {
+
+    try {
+
+        const redirectTo =
+            window.location.origin +
+            window.location.pathname;
+
+        console.log(
+            "OAuth redirect:",
+            redirectTo
+        );
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.signInWithOAuth({
+
+                provider: "google",
+
+                options: {
+                    redirectTo: redirectTo
+                }
+            });
+
+        if (error) {
+
+            console.error(
+                "OAuth Error:",
+                error
+            );
+
+            showToast(
+                "OAuth Error: " +
+                error.message
+            );
+
+            return;
+        }
+
+        console.log(
+            "OAuth started:",
+            data
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Google login error:",
+            error
+        );
+
+        showToast(
+            "Google login failed."
+        );
+    }
+}
+
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+async function checkSession() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+        if (error) {
+
+            console.error(
+                "Session error:",
+                error
+            );
+
+            currentUser = null;
+
+            return;
+        }
+
+        const session =
+            data.session;
+
+        if (session) {
+
+            currentUser = {
+
+                id:
+                    session.user.id,
+
+                email:
+                    session.user.email,
+
+                token:
+                    session.access_token
+            };
+
+            console.log(
+                "SESSION FOUND:",
+                session.user.email
+            );
+
+        } else {
+
+            currentUser = null;
+
+            console.log(
+                "No active session"
+            );
+        }
+
+        updateNav();
+
+    } catch (error) {
+
+        console.error(
+            "Session check failed:",
+            error
+        );
+
+        currentUser = null;
+    }
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+supabaseClient.auth.onAuthStateChange(
+    (event, session) => {
+
+        console.log(
+            "AUTH EVENT:",
+            event
+        );
+
+        if (session) {
+
+            currentUser = {
+
+                id:
+                    session.user.id,
+
+                email:
+                    session.user.email,
+
+                token:
+                    session.access_token
+            };
+
+            console.log(
+                "USER LOGGED IN:",
+                session.user.email
+            );
+
+        } else {
+
+            currentUser = null;
+        }
+
+        updateNav();
+    }
+);
+
+
+/* =========================================================
+   LOGIN PAGE
+========================================================= */
+
+function renderLogin() {
+
+    const app =
+        document.getElementById("app");
+
+    app.innerHTML = `
+        <div class="auth-wrapper">
+
+            <div class="auth">
+
+                <h1>
+                    Sign In
+                </h1>
+
+                <p>
+                    Sign in to continue to NEXORA
+                    and complete your purchase.
+                </p>
+
+                <button
+                    class="primary"
+                    style="width:100%"
+                    onclick="loginWithGoogle()">
+
+                    Continue with Google
+
+                </button>
+
+                <button
+                    class="secondary"
+                    style="
+                        width:100%;
+                        margin-top:10px
+                    "
+                    onclick="goHome()">
+
+                    Back to Store
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout() {
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.signOut();
+
+        if (error) {
+
+            throw error;
+        }
+
+        currentUser = null;
+
+        showToast(
+            "Logged out"
+        );
+
+        goHome();
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+        showToast(
+            "Could not log out."
+        );
+    }
+}
+
+
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function escapeJs(value) {
+
+    return String(value ?? "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function startApp() {
+
+    render();
+
+    await checkSession();
+
+    if (currentPage === "home") {
+        await fetchProducts();
+    }
+}
+
+startApp();
+
+</script>
+
+
+</body>
+</html>
