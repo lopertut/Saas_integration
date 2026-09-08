@@ -74,9 +74,10 @@ func main() {
 	router.Handle("/order", authMiddleware.Protect(http.HandlerFunc(h.GetOrders))).Methods("GET")
 	router.HandleFunc("/orderItems/{id}", h.GetOrderItemsByOrderId).Methods("GET")
 
-	router.Handle("/create-checkout-session", http.HandlerFunc(createCheckoutSession)).Methods("POST")
-
-	// Define CORS options
+    router.HandleFunc("/group", showGroup).Methods("GET")
+    router.HandleFunc("/create-checkout-session", createCheckoutSession).Methods("POST")
+	
+    // Define CORS options
 	corsObj := handlers.CORS(
 		handlers.AllowedOrigins([]string{"*"}),
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
@@ -89,7 +90,18 @@ func main() {
 	log.Fatal(http.ListenAndServe(port, corsObj(router)))
 }
 
+func showGroup(w http.ResponseWriter, r *http.Request) {
+	// Retrieve the group name from the environment variable
+	groupName := os.Getenv("GROUP_NAME")
+	
+	// Fallback if the environment variable isn't set
+	if groupName == "" {
+		groupName = "Unknown Group"
+	}
 
+	// Write the group name to the HTTP response
+	fmt.Fprintf(w, "Group Name: %s", groupName)
+}
 
 type CheckoutRequest struct {
     Total float64 `json:"total"`
