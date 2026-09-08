@@ -26,58 +26,67 @@ var (
 )
 
 func main() {
-    ctx := context.Background()
+	ctx := context.Background()
+
 	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
+	
+	// 1. Properly get the port and ensure it has a colon prefix (fallback to ":8080" if empty)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	if port[0] != ':' {
+		port = ":" + port
+	}
 
-    pool, err := pgxpool.New(ctx, os.Getenv("DATABASE_URL"))
-    if err != nil {
-        log.Fatalf("Failed to connect to the database: %v", err)
-    }
+	pool, err := pgxpool.New(ctx, os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatalf("Failed to connect to the database: %v", err)
+	}
 
-    repo := repository.NewRepository(pool)
-    s := service.NewService(repo)
-    h := handler.NewHandler(s)
-    authService := service.NewAuthService(repo, os.Getenv("JWT_KEY"))
-    authHandler := handler.NewAuthHandler(authService)
-    authMiddleware := middleware.NewAuthMiddleware(authService)
+	repo := repository.NewRepository(pool)
+	s := service.NewService(repo)
+	h := handler.NewHandler(s)
+	authService := service.NewAuthService(repo, os.Getenv("JWT_KEY"))
+	authHandler := handler.NewAuthHandler(authService)
+	authMiddleware := middleware.NewAuthMiddleware(authService)
 
-    router := mux.NewRouter()
+	router := mux.NewRouter()
 
-    router.HandleFunc("/products", h.GetProducts).Methods("GET")
-    router.HandleFunc("/products/{id}", h.GetProductById).Methods("GET")
-    router.HandleFunc("/products/category/{name}", h.GetProductsByCategoryId).Methods("GET")
-    router.HandleFunc("/products/search/{searchQuery}", h.GetProductsByName).Methods("GET")
+	router.HandleFunc("/products", h.GetProducts).Methods("GET")
+	router.HandleFunc("/products/{id}", h.GetProductById).Methods("GET")
+	router.HandleFunc("/products/category/{name}", h.GetProductsByCategoryId).Methods("GET")
+	router.HandleFunc("/products/search/{searchQuery}", h.GetProductsByName).Methods("GET")
 
-    router.HandleFunc("/registration", authHandler.Registration).Methods("POST")
-    router.HandleFunc("/login", authHandler.Login).Methods("POST")
+	router.HandleFunc("/registration", authHandler.Registration).Methods("POST")
+	router.HandleFunc("/login", authHandler.Login).Methods("POST")
 
-    router.Handle("/cart", authMiddleware.Protect(http.HandlerFunc(h.GetCartItemsByCartId))).Methods("GET")
-    router.Handle("/cartItem", authMiddleware.Protect(http.HandlerFunc(h.AddCartItem))).Methods("POST")
-    router.HandleFunc("/cartItem/increase/{id}", h.IncreaseCartItem).Methods("PUT")
-    router.HandleFunc("/cartItem/decrease/{id}", h.DecreaseCartItem).Methods("PUT")
-    router.HandleFunc("/cartItem/{id}", h.DeleteCartItem).Methods("DELETE")
+	router.Handle("/cart", authMiddleware.Protect(http.HandlerFunc(h.GetCartItemsByCartId))).Methods("GET")
+	router.Handle("/cartItem", authMiddleware.Protect(http.HandlerFunc(h.AddCartItem))).Methods("POST")
+	router.HandleFunc("/cartItem/increase/{id}", h.IncreaseCartItem).Methods("PUT")
+	router.HandleFunc("/cartItem/decrease/{id}", h.DecreaseCartItem).Methods("PUT")
+	router.HandleFunc("/cartItem/{id}", h.DeleteCartItem).Methods("DELETE")
 
-    router.HandleFunc("/reviews/{product_id}", h.GetReviews).Methods("GET")
-    router.Handle("/reviews", authMiddleware.Protect(http.HandlerFunc(h.AddReview))).Methods("POST")
+	router.HandleFunc("/reviews/{product_id}", h.GetReviews).Methods("GET")
+	router.Handle("/reviews", authMiddleware.Protect(http.HandlerFunc(h.AddReview))).Methods("POST")
 
-    router.Handle("/order", authMiddleware.Protect(http.HandlerFunc(h.CreateOrder))).Methods("POST") 
-    router.Handle("/order", authMiddleware.Protect(http.HandlerFunc(h.GetOrders))).Methods("GET")   
-    router.HandleFunc("/orderItems/{id}", h.GetOrderItemsByOrderId).Methods("GET")   
+	router.Handle("/order", authMiddleware.Protect(http.HandlerFunc(h.CreateOrder))).Methods("POST")
+	router.Handle("/order", authMiddleware.Protect(http.HandlerFunc(h.GetOrders))).Methods("GET")
+	router.HandleFunc("/orderItems/{id}", h.GetOrderItemsByOrderId).Methods("GET")
 
-	router.Handle("/create-checkout-session", http.HandlerFunc(createCheckoutSession)).Methods("POST")                
+	router.Handle("/create-checkout-session", http.HandlerFunc(createCheckoutSession)).Methods("POST")
 
-    // 2. Define CORS options (allowing all origins, methods, and common headers for development)
-    corsObj := handlers.CORS(
-        handlers.AllowedOrigins([]string{"*"}), // Change "*" to your frontend URL in production (e.g., "http://localhost:3000")
-        handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
-        handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "Accept"}),
-    )
+	// Define CORS options
+	corsObj := handlers.CORS(
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "Accept"}),
+	)
 
-    port := ":8000"
-    fmt.Printf("server is running on: http://localhost%s\n", port)
-    
-    // 3. Wrap your router with corsObj inside ListenAndServe
-    log.Fatal(http.ListenAndServe(port, corsObj(router)))
+	fmt.Printf("server is running on: http://localhost%s\n", port)
+
+	// Wrap your router with corsObj inside ListenAndServe
+	log.Fatal(http.ListenAndServe(port, corsObj(router)))
 }
 
 
